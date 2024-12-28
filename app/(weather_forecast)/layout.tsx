@@ -3,10 +3,11 @@
 import GPSResultComponent, {
   GPSPostion,
 } from "../_components/GPSResultComponent";
+import WeatherContext, { WeatherContextData } from "../_context/WeatherContext";
 import useAPIGet5DayWeather from "../_hooks/useAPIGet5DayWeather";
 import useAPIGetCurrentWeather from "../_hooks/useAPIGetCurrentWeather";
 import { Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function WeatherForecastApplicationLayout({
   children,
@@ -19,7 +20,7 @@ export default function WeatherForecastApplicationLayout({
   const {
     fetch: fetch5DayWeather,
     //isFetching: isFetching5DayWeather,
-    data: fiveDayForecastData,
+    data: forecastData,
   } = useAPIGet5DayWeather();
 
   const [gpsStatus, setGPSStatus] = useState<string>();
@@ -72,13 +73,21 @@ export default function WeatherForecastApplicationLayout({
   }, [currentWeatherData]);
 
   useEffect(() => {
-    if (fiveDayForecastData) console.log(fiveDayForecastData);
-  }, [fiveDayForecastData]);
+    if (forecastData) console.log(forecastData);
+  }, [forecastData]);
+
+  const weatherData = useMemo<WeatherContextData>(
+    () => ({
+      currentWeather: currentWeatherData,
+      forecast: forecastData,
+    }),
+    [currentWeatherData, forecastData],
+  );
 
   return (
     <Stack direction="column">
       <GPSResultComponent {...{ gpsStatus, gpsPosition, gpsError }} />
-      {children}
+      <WeatherContext value={weatherData}>{children}</WeatherContext>
     </Stack>
   );
 }

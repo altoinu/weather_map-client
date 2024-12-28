@@ -1,3 +1,5 @@
+"use client";
+
 import WeatherConditionIcon from "./WeatherConditionIcon";
 
 export interface ForecastItem {

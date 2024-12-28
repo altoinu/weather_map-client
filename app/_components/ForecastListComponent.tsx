@@ -1,3 +1,5 @@
+"use client";
+
 import ForecastComponent, { ForecastItem } from "./ForecastComponent";
 import { Chip, Divider } from "@mui/material";
 

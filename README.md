@@ -1,6 +1,6 @@
-# base_react_nextjs_project-20241220
+# weather_map-client
 
-Sample basic React Next.js project setup with some dev dependencies
+Detroit Labs coding challenge - simple weather forecast application. Frontend React Next.js client
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

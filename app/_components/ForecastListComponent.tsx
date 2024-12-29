@@ -1,6 +1,7 @@
 "use client";
 
-import ForecastComponent, { ForecastItem } from "./ForecastComponent";
+import { ForecastItem } from "../_types/WeatherData";
+import ForecastComponent from "./ForecastComponent";
 import { Chip, Divider } from "@mui/material";
 
 type ForecastListComponentProps = {

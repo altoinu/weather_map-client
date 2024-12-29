@@ -1,8 +1,6 @@
 "use client";
 
-import GPSResultComponent, {
-  GPSPostion,
-} from "../_components/GPSResultComponent";
+import GPSResultComponent from "../_components/GPSResultComponent";
 import WeatherContext, { WeatherContextData } from "../_context/WeatherContext";
 import useAPIGet5DayWeather from "../_hooks/useAPIGet5DayWeather";
 import useAPIGetCurrentWeather from "../_hooks/useAPIGetCurrentWeather";
@@ -24,49 +22,52 @@ export default function WeatherForecastApplicationLayout({
   } = useAPIGet5DayWeather();
 
   const [gpsStatus, setGPSStatus] = useState<string>();
-  const [gpsPosition, setGPSPosition] = useState<GPSPostion>();
-  const [gpsError, setGPSError] = useState<GeolocationPositionError>();
+  const [gpsPosition, setGPSPosition] = useState<GeolocationPosition | null>();
+  const [gpsError, setGPSError] = useState<GeolocationPositionError | null>();
 
+  // Get current location at start
   useEffect(() => {
-    if (fetchCurrentWeather && fetch5DayWeather) {
-      if (!navigator.geolocation) {
-        setGPSStatus("Geolocation is not available");
-      } else {
-        setGPSStatus("Trying to deteremine your location…");
+    if (!navigator.geolocation) {
+      setGPSStatus("Geolocation is not available");
+    } else {
+      setGPSStatus("Trying to deteremine your location…");
 
-        navigator.geolocation.getCurrentPosition(
-          (position: GeolocationPosition) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            setGPSPosition({
-              latitude,
-              longitude,
-            });
-
-            setGPSStatus("");
-
-            fetchCurrentWeather({
-              query: {
-                lat: latitude.toString(),
-                lon: longitude.toString(),
-              },
-            });
-
-            fetch5DayWeather({
-              query: {
-                lat: latitude.toString(),
-                lon: longitude.toString(),
-              },
-            });
-          },
-          (positionError: GeolocationPositionError) => {
-            setGPSStatus("Unable to retrieve your location");
-            setGPSError(positionError);
-          },
-        );
-      }
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          setGPSPosition(position);
+          setGPSStatus("");
+          setGPSError(null);
+        },
+        (positionError: GeolocationPositionError) => {
+          setGPSPosition(null);
+          setGPSStatus("Unable to retrieve your location");
+          setGPSError(positionError);
+        },
+      );
     }
-  }, [fetchCurrentWeather, fetch5DayWeather]);
+  }, []);
+
+  // Once location determined, load weather data
+  useEffect(() => {
+    if (gpsPosition && fetchCurrentWeather && fetch5DayWeather) {
+      const latitude = gpsPosition.coords.latitude;
+      const longitude = gpsPosition.coords.longitude;
+
+      fetchCurrentWeather({
+        query: {
+          lat: latitude.toString(),
+          lon: longitude.toString(),
+        },
+      });
+
+      fetch5DayWeather({
+        query: {
+          lat: latitude.toString(),
+          lon: longitude.toString(),
+        },
+      });
+    }
+  }, [gpsPosition, fetchCurrentWeather, fetch5DayWeather]);
 
   useEffect(() => {
     if (currentWeatherData) console.log(currentWeatherData);

@@ -2,12 +2,10 @@
 
 import { Stack, Typography } from "@mui/material";
 
-export type GPSPostion = { latitude: number; longitude: number };
-
 type GPSResultComponentProps = {
   gpsStatus?: string;
-  gpsPosition?: GPSPostion;
-  gpsError?: GeolocationPositionError;
+  gpsPosition?: GeolocationPosition | null;
+  gpsError?: GeolocationPositionError | null;
 };
 
 export default function GPSResultComponent({
@@ -20,7 +18,8 @@ export default function GPSResultComponent({
       {gpsStatus && <Typography variant="body1">{gpsStatus}</Typography>}
       {gpsPosition && (
         <Typography variant="body1">
-          Latitude: {gpsPosition.latitude} Longitude: {gpsPosition.longitude}
+          Latitude: {gpsPosition.coords.latitude} Longitude:{" "}
+          {gpsPosition.coords.longitude}
         </Typography>
       )}
       {gpsError && (

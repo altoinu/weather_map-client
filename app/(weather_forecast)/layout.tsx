@@ -1,7 +1,12 @@
 "use client";
 
 import GPSResultComponent from "../_components/GPSResultComponent";
-import WeatherContext, { WeatherContextData } from "../_context/WeatherContext";
+import {
+  CurrentWeatherContext,
+  CurrentWeatherContextData,
+  FiveDayWeatherContext,
+  FiveDayWeatherContextData,
+} from "../_context/WeatherContext";
 import useAPIGet5DayWeather from "../_hooks/useAPIGet5DayWeather";
 import useAPIGetCurrentWeather from "../_hooks/useAPIGetCurrentWeather";
 import { Stack } from "@mui/material";
@@ -12,13 +17,13 @@ export default function WeatherForecastApplicationLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const {
     fetch: fetchCurrentWeather,
-    //isFetching: isFetchingCurrentWeather,
+    isFetching: isFetchingCurrentWeather,
     data: currentWeatherData,
   } = useAPIGetCurrentWeather();
   const {
     fetch: fetch5DayWeather,
-    //isFetching: isFetching5DayWeather,
-    data: forecastData,
+    isFetching: isFetching5DayWeather,
+    data: fiveDayWeatherData,
   } = useAPIGet5DayWeather();
 
   const [gpsStatus, setGPSStatus] = useState<string>();
@@ -74,21 +79,33 @@ export default function WeatherForecastApplicationLayout({
   }, [currentWeatherData]);
 
   useEffect(() => {
-    if (forecastData) console.log(forecastData);
-  }, [forecastData]);
+    if (fiveDayWeatherData) console.log(fiveDayWeatherData);
+  }, [fiveDayWeatherData]);
 
-  const weatherData = useMemo<WeatherContextData>(
+  const currentWeatherContextValue = useMemo<CurrentWeatherContextData>(
     () => ({
       currentWeather: currentWeatherData,
-      forecast: forecastData,
+      isFetching: isFetchingCurrentWeather,
     }),
-    [currentWeatherData, forecastData],
+    [currentWeatherData, isFetchingCurrentWeather],
+  );
+
+  const fiveDayWeatherContextValue = useMemo<FiveDayWeatherContextData>(
+    () => ({
+      forecast: fiveDayWeatherData,
+      isFetching: isFetching5DayWeather,
+    }),
+    [fiveDayWeatherData, isFetching5DayWeather],
   );
 
   return (
     <Stack direction="column">
       <GPSResultComponent {...{ gpsStatus, gpsPosition, gpsError }} />
-      <WeatherContext value={weatherData}>{children}</WeatherContext>
+      <CurrentWeatherContext value={currentWeatherContextValue}>
+        <FiveDayWeatherContext value={fiveDayWeatherContextValue}>
+          {children}
+        </FiveDayWeatherContext>
+      </CurrentWeatherContext>
     </Stack>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import ForecastListComponent from "@/app/_components/ForecastListComponent";
-import WeatherContext from "@/app/_context/WeatherContext";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import { FiveDayWeatherContext } from "@/app/_context/WeatherContext";
 import { ForecastItem, isForecastData } from "@/app/_types/WeatherData";
 import { getDateString } from "@/app/_utils/DateUtils";
 import { Stack, Typography } from "@mui/material";
@@ -24,7 +25,7 @@ type ParsedForecastData = {
 };
 
 export default function FiveDayForecastPage() {
-  const { forecast } = use(WeatherContext);
+  const { forecast, isFetching } = use(FiveDayWeatherContext);
 
   const parsedForecastData = isForecastData(forecast)
     ? forecast.list.reduce<ParsedForecastData>((forecastData, item) => {
@@ -49,13 +50,16 @@ export default function FiveDayForecastPage() {
   }
 
   return (
-    forecast && (
-      <Stack direction="column">
-        <Typography variant="h5">5 day forecast:</Typography>
-        {forecastContents.map((item) => (
-          <Fragment key={item.id}>{item.content}</Fragment>
-        ))}
-      </Stack>
-    )
+    <>
+      {!forecast && isFetching && <LoadingSpinner />}
+      {forecast && (
+        <Stack direction="column">
+          <Typography variant="h5">5 day forecast:</Typography>
+          {forecastContents.map((item) => (
+            <Fragment key={item.id}>{item.content}</Fragment>
+          ))}
+        </Stack>
+      )}
+    </>
   );
 }

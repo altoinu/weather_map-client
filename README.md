@@ -1,12 +1,14 @@
 # weather_map-client
 
-Detroit Labs coding challenge - simple weather forecast application. Frontend React Next.js client
+Detroit Labs coding challenge - simple weather forecast application - Frontend React Next.js client
+
+In order to use this client, back end API server is also needed: [altoinu/weather_map-server](https://github.com/altoinu/weather_map-server).
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Node stuff
 
-- Node.js (v23.4.0) and npm [https://nodejs.org/](https://nodejs.org/)
+- Node.js (v23.5.0) and npm [https://nodejs.org/](https://nodejs.org/)
 
 ## Getting Started
 

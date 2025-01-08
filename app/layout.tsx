@@ -1,6 +1,7 @@
+import HeaderBar from "./_components/HeaderBar";
 import Navigation from "./_components/Navigation";
 import "./globals.css";
-import { Container, Stack, Typography } from "@mui/material";
+import { CssBaseline, Stack } from "@mui/material";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -29,13 +30,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Container>
-          <Stack direction="column">
-            <Typography variant="h2">Weather Forecast Application</Typography>
-            <Navigation />
-            {children}
+        <CssBaseline />
+        <Stack direction="column">
+          <HeaderBar />
+          <Stack direction="row">
+            <Navigation sx={{ flexShrink: 0 }} />
+            <Stack
+              direction="column"
+              component="main"
+              sx={{ flexGrow: 1, p: 3 }}
+            >
+              {children}
+            </Stack>
           </Stack>
-        </Container>
+        </Stack>
       </body>
     </html>
   );

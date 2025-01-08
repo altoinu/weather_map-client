@@ -1,17 +1,56 @@
 "use client";
 
-import { Stack } from "@mui/material";
+import {
+  Drawer,
+  DrawerProps,
+  List,
+  ListItem,
+  ListItemButton,
+  Toolbar,
+} from "@mui/material";
 import Link from "next/link";
 
-export default function Navigation() {
+type NavigationProps = Pick<DrawerProps, "sx">;
+
+export default function Navigation({ sx }: NavigationProps) {
+  const drawerWidth = 240;
+  const combinedStyles = {
+    width: drawerWidth,
+    [`& .MuiDrawer-paper`]: {
+      width: drawerWidth,
+      boxSizing: "border-box",
+    },
+    ...sx,
+  };
+
+  const links = [
+    {
+      text: "Current Temperature",
+      href: "/",
+    },
+    {
+      text: "5 Day Temperatures",
+      href: "/5day",
+    },
+  ];
+
   return (
-    <Stack direction="row" gap={1}>
-      <Link href="/" style={{ color: "red", textDecoration: "underline" }}>
-        Current Temperature
-      </Link>
-      <Link href="/5day" style={{ color: "red", textDecoration: "underline" }}>
-        5 Day Temperatures
-      </Link>
-    </Stack>
+    <Drawer variant="permanent" sx={combinedStyles}>
+      <Toolbar />
+      <List>
+        {links.map((link, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton>
+              <Link
+                href={link.href}
+                style={{ color: "red", textDecoration: "underline" }}
+              >
+                {link.text}
+              </Link>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 }

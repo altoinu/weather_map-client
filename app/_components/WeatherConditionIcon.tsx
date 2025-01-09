@@ -3,6 +3,7 @@
  * https://openweathermap.org/weather-conditions
  */
 
+import { Typography } from "@mui/material";
 import Image from "next/image";
 
 type WeatherConditionIconProps = {
@@ -23,7 +24,7 @@ export default function WeatherConditionIcon({
         width="100"
         height="100"
       />
-      <span>{condition.main}</span>
+      <Typography variant="body1">{condition.main}</Typography>
     </>
   );
 }

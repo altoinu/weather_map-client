@@ -1,6 +1,8 @@
 "use client";
 
 import GPSResultComponent from "../_components/GPSResultComponent";
+import HeaderBar from "../_components/HeaderBar";
+import Navigation from "../_components/Navigation";
 import {
   CurrentWeatherContext,
   CurrentWeatherContextData,
@@ -9,7 +11,7 @@ import {
 } from "../_context/WeatherContext";
 import useAPIGet5DayWeather from "../_hooks/useAPIGet5DayWeather";
 import useAPIGetCurrentWeather from "../_hooks/useAPIGetCurrentWeather";
-import { Stack } from "@mui/material";
+import { Stack, Theme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 
 export default function WeatherForecastApplicationLayout({
@@ -29,6 +31,8 @@ export default function WeatherForecastApplicationLayout({
   const [gpsStatus, setGPSStatus] = useState<string>();
   const [gpsPosition, setGPSPosition] = useState<GeolocationPosition | null>();
   const [gpsError, setGPSError] = useState<GeolocationPositionError | null>();
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Get current location at start
   useEffect(() => {
@@ -98,14 +102,34 @@ export default function WeatherForecastApplicationLayout({
     [fiveDayWeatherData, isFetching5DayWeather],
   );
 
+  const handleMenuDrawerButtonClick = (open: boolean) => {
+    setMenuOpen(open);
+  };
+
   return (
     <Stack direction="column">
-      <GPSResultComponent {...{ gpsStatus, gpsPosition, gpsError }} />
-      <CurrentWeatherContext value={currentWeatherContextValue}>
-        <FiveDayWeatherContext value={fiveDayWeatherContextValue}>
-          {children}
-        </FiveDayWeatherContext>
-      </CurrentWeatherContext>
+      <HeaderBar
+        sx={{
+          position: "sticky",
+          zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
+        }}
+        onMenuDrawerButtonClick={handleMenuDrawerButtonClick}
+      />
+      <Stack direction="row">
+        <Navigation open={menuOpen} sx={{ flexShrink: 0 }} />
+        <Stack
+          component="main"
+          direction="column"
+          sx={{ flexGrow: 1, ml: 3, mr: 3, mt: 3, overflowX: "auto" }}
+        >
+          <GPSResultComponent {...{ gpsStatus, gpsPosition, gpsError }} />
+          <CurrentWeatherContext value={currentWeatherContextValue}>
+            <FiveDayWeatherContext value={fiveDayWeatherContextValue}>
+              {children}
+            </FiveDayWeatherContext>
+          </CurrentWeatherContext>
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

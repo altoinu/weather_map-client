@@ -3,6 +3,7 @@
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import {
+  CSSObject,
   Drawer,
   DrawerProps,
   List,
@@ -11,23 +12,56 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
+  Theme,
   Toolbar,
 } from "@mui/material";
 import Link from "next/link";
+import { useMemo } from "react";
 
-type NavigationProps = Pick<DrawerProps, "sx">;
+const drawerWidth = 240;
+const drawerWidth_xs = 56;
 
-export default function Navigation({ sx }: NavigationProps) {
-  const drawerWidth = 240;
-  const drawerWidth_xs = 56;
+const openedMixin = (theme: Theme): CSSObject => ({
+  overflowX: "hidden",
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+});
 
-  const combinedStyles = {
-    minWidth: 0,
-    [`& .MuiDrawer-paper`]: {
-      boxSizing: "border-box",
-    },
-    ...sx,
-  };
+const closedMixin = (theme: Theme): CSSObject => ({
+  overflowX: "hidden",
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+});
+
+type NavigationProps = Pick<DrawerProps, "sx"> & {
+  open?: boolean;
+};
+
+export default function Navigation({ open = false, sx }: NavigationProps) {
+  const drawerStyles = useMemo(
+    () => (theme: Theme) => ({
+      ...sx,
+      ...(open ? openedMixin(theme) : closedMixin(theme)),
+      minWidth: 0,
+      width: {
+        sm: drawerWidth,
+        xs: open ? drawerWidth : drawerWidth_xs,
+      },
+      "& .MuiDrawer-paper": {
+        boxSizing: "border-box",
+        width: {
+          sm: drawerWidth,
+          xs: open ? drawerWidth : drawerWidth_xs,
+        },
+        ...(open ? openedMixin(theme) : closedMixin(theme)),
+      },
+    }),
+    [open, sx],
+  );
 
   const links = [
     {
@@ -43,59 +77,46 @@ export default function Navigation({ sx }: NavigationProps) {
   ];
 
   return (
-    <>
-      <Drawer
-        variant="permanent"
-        sx={{
-          ...combinedStyles,
-          width: {
-            sm: drawerWidth,
-            xs: drawerWidth_xs,
-          },
-          [`& .MuiDrawer-paper`]: {
-            width: {
-              sm: drawerWidth,
-              xs: drawerWidth_xs,
-            },
-          },
-        }}
-      >
-        <Toolbar />
-        <List>
-          {links.map((link, index) => (
-            <ListItem key={index} disablePadding>
-              <Link
-                href={link.href}
-                style={{
-                  color: "red",
-                  textDecoration: "underline",
-                  width: "100%",
-                }}
-              >
-                <ListItemButton>
-                  <Stack direction="row" gap={1}>
-                    <ListItemIcon
-                      sx={{
-                        mb: 0.5,
-                        mt: 0.5,
-                        minWidth: 0,
-                        alignItems: "center",
-                      }}
-                    >
-                      {link.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      sx={{ display: { sm: "block", xs: "none" }, minWidth: 0 }}
-                    >
-                      {link.text}
-                    </ListItemText>
-                  </Stack>
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </>
+    <Drawer open={open} sx={drawerStyles} variant="permanent">
+      <Toolbar />
+      <List>
+        {links.map((link, index) => (
+          <ListItem key={index} disablePadding>
+            <Link
+              href={link.href}
+              style={{
+                color: "red",
+                textDecoration: "underline",
+                width: "100%",
+              }}
+            >
+              <ListItemButton>
+                <Stack direction="row" gap={1}>
+                  <ListItemIcon
+                    sx={{
+                      mb: 0.5,
+                      mt: 0.5,
+                      minWidth: 0,
+                      alignItems: "center",
+                    }}
+                  >
+                    {link.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    sx={{
+                      display: { sm: "block", xs: open ? "block" : "none" },
+                      minWidth: 0,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {link.text}
+                  </ListItemText>
+                </Stack>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 }

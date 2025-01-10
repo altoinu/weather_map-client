@@ -54,7 +54,7 @@ export default function FiveDayForecastPage() {
       {!forecast && isFetching && <LoadingSpinner />}
       {forecast && (
         <Stack direction="column">
-          <Typography variant="h5">5 day forecast:</Typography>
+          <Typography variant="h4">5 day forecast:</Typography>
           {forecastContents.map((item) => (
             <Fragment key={item.id}>{item.content}</Fragment>
           ))}

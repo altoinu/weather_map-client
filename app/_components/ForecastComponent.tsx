@@ -2,18 +2,21 @@
 
 import { ForecastItem } from "../_types/WeatherData";
 import WeatherConditionIcon from "./WeatherConditionIcon";
-import { Stack, Typography } from "@mui/material";
+import { Stack, StackProps, Typography } from "@mui/material";
 
-type ForecastComponentProps = {
+type ForecastComponentProps = Pick<StackProps, "sx"> & {
   value: ForecastItem;
 };
 
-export default function ForecastComponent({ value }: ForecastComponentProps) {
+export default function ForecastComponent({
+  sx,
+  value,
+}: ForecastComponentProps) {
   return (
     <Stack
       direction="row"
       gap={1}
-      sx={{ alignItems: "center", justifyContent: "space-between" }}
+      sx={{ ...sx, alignItems: "center", justifyContent: "space-between" }}
     >
       <Typography variant="h5">{value.dt_txt}</Typography>
       <Typography variant="body1">{value.main.temp} F</Typography>

@@ -11,7 +11,7 @@ import {
 } from "../_context/WeatherContext";
 import useAPIGet5DayWeather from "../_hooks/useAPIGet5DayWeather";
 import useAPIGetCurrentWeather from "../_hooks/useAPIGetCurrentWeather";
-import { Stack } from "@mui/material";
+import { Stack, Theme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 
 export default function WeatherForecastApplicationLayout({
@@ -111,6 +111,7 @@ export default function WeatherForecastApplicationLayout({
       <HeaderBar
         sx={{
           position: "sticky",
+          zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
         }}
         onMenuDrawerButtonClick={handleMenuDrawerButtonClick}
       />
@@ -119,7 +120,7 @@ export default function WeatherForecastApplicationLayout({
         <Stack
           component="main"
           direction="column"
-          sx={{ flexGrow: 1, p: 3, overflowX: "auto" }}
+          sx={{ flexGrow: 1, ml: 3, mr: 3, mt: 3, overflowX: "auto" }}
         >
           <GPSResultComponent {...{ gpsStatus, gpsPosition, gpsError }} />
           <CurrentWeatherContext value={currentWeatherContextValue}>

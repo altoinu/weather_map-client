@@ -6,7 +6,6 @@ import {
   AppBar,
   AppBarProps,
   IconButton,
-  Theme,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -31,12 +30,7 @@ export default function HeaderBar({
   };
 
   return (
-    <AppBar
-      sx={{
-        ...sx,
-        zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
-      }}
-    >
+    <AppBar sx={sx}>
       <Toolbar>
         <IconButton
           aria-label="open menu drawer"

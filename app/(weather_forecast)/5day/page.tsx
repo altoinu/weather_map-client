@@ -25,10 +25,10 @@ type ParsedForecastData = {
 };
 
 export default function FiveDayForecastPage() {
-  const { forecast, isFetching } = use(FiveDayWeatherContext);
+  const { data, isFetching, error } = use(FiveDayWeatherContext);
 
-  const parsedForecastData = isForecastData(forecast)
-    ? forecast.list.reduce<ParsedForecastData>((forecastData, item) => {
+  const parsedForecastData = isForecastData(data)
+    ? data.list.reduce<ParsedForecastData>((forecastData, item) => {
         const date = getDateString(new Date(item.dt_txt));
 
         if (!forecastData[date]) forecastData[date] = [];
@@ -51,8 +51,14 @@ export default function FiveDayForecastPage() {
 
   return (
     <>
-      {!forecast && isFetching && <LoadingSpinner />}
-      {forecast && (
+      {!data && isFetching && <LoadingSpinner />}
+      {error != undefined && (
+        <Typography variant="body1">
+          Error loading 5 day forecast... Server may be down. Please try again
+          later.
+        </Typography>
+      )}
+      {data && (
         <Stack direction="column">
           <Typography variant="h4">5 day forecast:</Typography>
           {forecastContents.map((item) => (

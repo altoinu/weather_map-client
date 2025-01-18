@@ -19,13 +19,15 @@ export default function WeatherForecastApplicationLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const {
     fetch: fetchCurrentWeather,
-    isFetching: isFetchingCurrentWeather,
     data: currentWeatherData,
+    isFetching: isFetchingCurrentWeather,
+    error: currentWeatherFetchError,
   } = useAPIGetCurrentWeather();
   const {
     fetch: fetch5DayWeather,
-    isFetching: isFetching5DayWeather,
     data: fiveDayWeatherData,
+    isFetching: isFetching5DayWeather,
+    error: fiveDayWeatherFetchError,
   } = useAPIGet5DayWeather();
 
   const [gpsStatus, setGPSStatus] = useState<string>();
@@ -88,18 +90,20 @@ export default function WeatherForecastApplicationLayout({
 
   const currentWeatherContextValue = useMemo<CurrentWeatherContextData>(
     () => ({
-      currentWeather: currentWeatherData,
+      data: currentWeatherData,
       isFetching: isFetchingCurrentWeather,
+      error: currentWeatherFetchError,
     }),
-    [currentWeatherData, isFetchingCurrentWeather],
+    [currentWeatherData, isFetchingCurrentWeather, currentWeatherFetchError],
   );
 
   const fiveDayWeatherContextValue = useMemo<FiveDayWeatherContextData>(
     () => ({
-      forecast: fiveDayWeatherData,
+      data: fiveDayWeatherData,
       isFetching: isFetching5DayWeather,
+      error: fiveDayWeatherFetchError,
     }),
-    [fiveDayWeatherData, isFetching5DayWeather],
+    [fiveDayWeatherData, isFetching5DayWeather, fiveDayWeatherFetchError],
   );
 
   const handleMenuDrawerButtonClick = (open: boolean) => {

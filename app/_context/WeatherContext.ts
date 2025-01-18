@@ -2,21 +2,21 @@ import { FetchResponseData } from "../_hooks/useFetch";
 import { createContext } from "react";
 
 export type CurrentWeatherContextData = {
-  currentWeather: FetchResponseData | null | undefined;
+  data?: FetchResponseData | null;
   isFetching: boolean;
+  error?: Error | unknown;
 };
 
 export const CurrentWeatherContext = createContext<CurrentWeatherContextData>({
-  currentWeather: null,
   isFetching: false,
 });
 
 export type FiveDayWeatherContextData = {
-  forecast: FetchResponseData | null | undefined;
+  data?: FetchResponseData | null;
   isFetching: boolean;
+  error?: Error | unknown;
 };
 
 export const FiveDayWeatherContext = createContext<FiveDayWeatherContextData>({
-  forecast: null,
   isFetching: false,
 });

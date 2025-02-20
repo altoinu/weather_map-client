@@ -32,10 +32,10 @@ const eslintConfig = [
   },
   {
     // for jest test files
-    files: [
-      "**/*.test.{js,cjs,mjs,jsx,ts,tsx}",
-      "**/__tests__/**/*.{js,cjs,mjs,jsx,ts,tsx}",
-    ],
+    // files: [
+    //   "**/*.test.{js,cjs,mjs,jsx,ts,tsx}",
+    //   "**/__tests__/**/*.{js,cjs,mjs,jsx,ts,tsx}",
+    // ],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -45,7 +45,8 @@ const eslintConfig = [
   },
   {
     // for other non test files
-    files: ["**/*.{js,cjs,mjs,jsx,ts,tsx}"],
+    // files: ["**/*.{js,cjs,mjs,jsx,ts,tsx}"],
+    files: ["**/*.?(c|m)[jt]s?(x)"],
     languageOptions: {
       globals: {
         ...globals.browser,

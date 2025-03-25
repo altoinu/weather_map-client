@@ -33,9 +33,13 @@ const eslintConfig = [
   {
     // for jest test files
     // files: [
-    //   "**/*.test.{js,cjs,mjs,jsx,ts,tsx}",
+    //   "**/*.{spec,test}.{js,cjs,mjs,jsx,ts,tsx}",
     //   "**/__tests__/**/*.{js,cjs,mjs,jsx,ts,tsx}",
     // ],
+    files: [
+      "**/*.{spec,test}.?(c|m)[jt]s?(x)",
+      "**/__tests__/**/*.?(c|m)[jt]s?(x)",
+    ],
     languageOptions: {
       globals: {
         ...globals.jest,
